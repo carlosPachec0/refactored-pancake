@@ -4,14 +4,21 @@
 <h2>@ViewBag.Title.</h2>
 
 
-@if (!string.IsNullOrEmpty(ViewBag.Error))
+@using (Html.BeginForm("ObtenerRespuestaApi", "Home", FormMethod.Post))
 {
-
-    <strong>Error:</strong> @ViewBag.Error
-
+    <select name="selectedItem" class="form-control">
+        <option value="">String vacío</option>
+        <option value="E-U10-UNILATIN">E-U10-UNILATIN</option>
+        <option value="E-U10-DSCVCOVE">E-U10-DSCVCOVE</option>
+    </select>
+    <br />
+    <button type="submit" class="btn btn-primary">Enviar</button>
 }
-else
+
+@if (!string.IsNullOrEmpty(ViewBag.ResultadpApi))
 {
-    <h2>Resultado de la API</h2>
-    <p>El resultado de la API es: @ViewBag.ResultadoAPI</p>
+    <div>
+        <p>Resultado de la API:</p>
+        <p>@Html.Raw(ViewBag.ResultadpApi)</p>
+    </div>
 }

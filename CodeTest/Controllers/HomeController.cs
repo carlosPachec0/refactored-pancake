@@ -52,17 +52,22 @@ namespace PruebaIngreso.Controllers
             return View();
         }
 
-        public ActionResult Test3()
+        public ActionResult Test3(string content = "")
         {
+            ViewBag.ResultadpApi = content;
+            return View();
 
+        }
+
+        [HttpPost]
+        public ActionResult ObtenerRespuestaApi(string selectedItem)
+        {
             string apiUrl = "https://refactored-pancake.free.beeceptor.com/margin/";
 
-            string code = "";
-            //string code = "E-U10-UNILATIN"; //204
-            //string code = "E-U10-DSCVCOVE"; //404
+            if(selectedItem == null) selectedItem = string.Empty;
 
 
-            string url = string.IsNullOrEmpty(code) ? apiUrl : $"{apiUrl}{code}";
+            string url = string.IsNullOrEmpty(selectedItem) ? apiUrl : $"{apiUrl}{selectedItem}";
 
             try
             {
@@ -71,7 +76,7 @@ namespace PruebaIngreso.Controllers
                     System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // se añade para poder acceder debido al framework 
                     client.DefaultRequestHeaders.Clear(); //Limpia cualquier encabezado
 
-                    //Obtengo el response y lo guardo en un HttpResponseMessage
+                    //btengo el response y lo guardo en un HttpResponseMessage
                     HttpResponseMessage response = client.GetAsync(url).Result;
 
                     // Valido un status 200
@@ -81,26 +86,24 @@ namespace PruebaIngreso.Controllers
                         string content = response.Content.ReadAsStringAsync().Result;
 
 
-                        ViewBag.ResultadoAPI = content;
-                        return View();
+                        //ViewBag.ResultadoAPI = content;
+                        return RedirectToAction("Test3", new { content = content });
                     }
                     else
                     {
                         //Diferente a 200.
                         string content = "{ \"margin\": 0.0 }";
-                        ViewBag.ResultadoAPI = content;
+                        //ViewBag.ResultadoAPI = content;
 
-                        return View();
+                        return RedirectToAction("Test3", new { content = content });
                     }
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Algo ocurrió mal, intentar más tarde.";
-
-                return View();
+                string content = "Algo ocurrió mal, intentar más tarde.";
+                return RedirectToAction("Test3", new { content = content });
             }
-
         }
 
         public ActionResult Test4()
