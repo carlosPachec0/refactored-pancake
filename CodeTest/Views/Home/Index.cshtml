@@ -27,12 +27,12 @@
     <div class="col-md-4">
         <h2>Test 2</h2>
         <p>Se requiere navegar a una ruta dentro de la aplicación.</p>
-        <p><a class="btn btn-default" href="@Url.RouteUrl("Test2")">Empezar</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("Test2")">Empezar</a></p> @*Se cambia route por action*@
     </div>
     <div class="col-md-4">
         <h2>Test 3</h2>
         <p>
-            Realizar una invocacion al API https://codetest.free.beeceptor.com/margin/{code} para recuperar 
+            Realizar una invocacion al API https://codetest.free.beeceptor.com/margin/{code} para recuperar
             el margen personalizado por codigo de servicio y mostrarlo en la vista.
             Si el api contesta con un status 200 es que existe el margen debemos de regresar el valor de la respuesta.
             Si el api contesta cualquier otro status se debe de regresar { "margin": 0.0} .

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
+using System.Net;
 using System.Web.Mvc;
 using Quote.Contracts;
 using Quote.Models;
@@ -52,7 +54,53 @@ namespace PruebaIngreso.Controllers
 
         public ActionResult Test3()
         {
-            return View();
+
+            string apiUrl = "https://refactored-pancake.free.beeceptor.com/margin/";
+
+            string code = "";
+            //string code = "E-U10-UNILATIN"; //204
+            //string code = "E-U10-DSCVCOVE"; //404
+
+
+            string url = string.IsNullOrEmpty(code) ? apiUrl : $"{apiUrl}{code}";
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // se añade para poder acceder debido al framework 
+                    client.DefaultRequestHeaders.Clear(); //Limpia cualquier encabezado
+
+                    //Obtengo el response y lo guardo en un HttpResponseMessage
+                    HttpResponseMessage response = client.GetAsync(url).Result;
+
+                    // Valido un status 200
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        //Se guarda sí se consume con exito
+                        string content = response.Content.ReadAsStringAsync().Result;
+
+
+                        ViewBag.ResultadoAPI = content;
+                        return View();
+                    }
+                    else
+                    {
+                        //Diferente a 200.
+                        string content = "{ \"margin\": 0.0 }";
+                        ViewBag.ResultadoAPI = content;
+
+                        return View();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Algo ocurrió mal, intentar más tarde.";
+
+                return View();
+            }
+
         }
 
         public ActionResult Test4()

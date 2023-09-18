@@ -2,3 +2,16 @@
     ViewBag.Title = "Test 3";
 }
 <h2>@ViewBag.Title.</h2>
+
+
+@if (!string.IsNullOrEmpty(ViewBag.Error))
+{
+
+    <strong>Error:</strong> @ViewBag.Error
+
+}
+else
+{
+    <h2>Resultado de la API</h2>
+    <p>El resultado de la API es: @ViewBag.ResultadoAPI</p>
+}
